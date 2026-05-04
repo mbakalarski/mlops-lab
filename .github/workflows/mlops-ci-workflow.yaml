@@ -1,5 +1,9 @@
 name: MLOps CI Workflow
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   push:
     branches:
@@ -67,7 +71,7 @@ jobs:
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
@@ -81,4 +85,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-fastapi:${{ github.sha }}
+            ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}-fastapi:${{ github.sha }}
