@@ -17,6 +17,7 @@ on:
           - data_processing
           - model_training
           - build_and_publish
+          - streamlit-app
 
 jobs:
   data_processing:
@@ -186,3 +187,33 @@ jobs:
             ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:latest
           docker push ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:${COMMIT_HASH}
           docker push ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:latest
+
+  streamlit-app:
+    if: inputs.jobs == 'all' || inputs.jobs == 'streamlit-app'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11.15'
+
+      - name: Install dependencies
+        run: |
+          cd streamlit_app
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build and Push Streamlit Docker Image
+        uses: docker/build-push-action@v7
+        with:
+          context: ./streamlit_app
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:streamlit-latest
+            ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:streamlit-${{ github.sha }}
