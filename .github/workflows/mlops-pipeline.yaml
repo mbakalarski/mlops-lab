@@ -23,14 +23,14 @@ on:
         description: 'Run Build and Publish job'
         required: false
         default: 'false'
-  release:
-    types: [ created ]
-    branches: [ main ]
-    tags: [ 'v*.*.*' ]
+  # release:
+  #   types: [ created ]
+  #   branches: [ main ]
+  #   tags: [ 'v*.*.*' ]
 
 jobs:
   data_processing:
-    # if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_data_processing == 'true')
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_data_processing == 'true')
     runs-on: ubuntu-latest
 
     steps:
@@ -73,7 +73,7 @@ jobs:
           path: models/trained/preprocessor.pkl
 
   model_training:
-    # if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_model_training == 'true')
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_model_training == 'true')
     runs-on: ubuntu-latest
     needs: data_processing
 
@@ -135,7 +135,7 @@ jobs:
           docker rm mlflow-tracking-server || true
 
   build_and_publish:
-    # if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_build_and_publish == 'true')
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_build_and_publish == 'true')
     runs-on: ubuntu-latest
     needs: model_training
 
