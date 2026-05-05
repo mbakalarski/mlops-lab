@@ -190,6 +190,7 @@ jobs:
 
   streamlit-app:
     if: inputs.jobs == 'all' || inputs.jobs == 'streamlit-app'
+
     runs-on: ubuntu-latest
 
     steps:
@@ -221,5 +222,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:streamlit-latest
-            ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:streamlit-${{ github.sha }}
+            ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}-streamlit:latest
+            ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}-streamlit:${{ github.sha }}
