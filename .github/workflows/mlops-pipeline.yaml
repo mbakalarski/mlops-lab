@@ -7,30 +7,25 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      run_all:
-        description: 'Run all jobs'
+      jobs:
+        type: choice
+        description: 'Select which jobs to run'
         required: false
-        default: 'true'
-      run_data_processing:
-        description: 'Run Data Processing job'
-        required: false
-        default: 'false'
-      run_model_training:
-        description: 'Run Model Training job'
-        required: false
-        default: 'false'
-      run_build_and_publish:
-        description: 'Run Build and Publish job'
-        required: false
-        default: 'false'
-  # release:
-  #   types: [ created ]
-  #   branches: [ main ]
-  #   tags: [ 'v*.*.*' ]
+        default: 'all'
+        options:
+          - all
+          - data_processing
+          - model_training
+          - build_and_publish
 
 jobs:
   data_processing:
-    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_data_processing == 'true')
+    if: >
+        inputs.jobs == 'all' ||
+        inputs.jobs == 'data_processing' ||
+        inputs.jobs == 'model_training' ||
+        inputs.jobs == 'build_and_publish'
+
     runs-on: ubuntu-latest
 
     steps:
@@ -73,9 +68,13 @@ jobs:
           path: models/trained/preprocessor.pkl
 
   model_training:
-    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_model_training == 'true')
-    runs-on: ubuntu-latest
+    if: >
+      inputs.jobs == 'all' ||
+      inputs.jobs == 'model_training' ||
+      inputs.jobs == 'build_and_publish'
     needs: data_processing
+
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -135,9 +134,12 @@ jobs:
           docker rm mlflow-tracking-server || true
 
   build_and_publish:
-    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.run_all == 'true' || github.event.inputs.run_build_and_publish == 'true')
-    runs-on: ubuntu-latest
+    if: >
+      inputs.jobs == 'all' ||
+      inputs.jobs == 'build_and_publish'
     needs: model_training
+
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
