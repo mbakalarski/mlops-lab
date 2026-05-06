@@ -8,6 +8,4 @@ RUN pip install -r requirements.txt --no-cache
 
 EXPOSE 8501
 
-ENV API_URL=http://model:8000
-
 CMD [ "streamlit", "run", "app.py", "--server.address=0.0.0.0" ]

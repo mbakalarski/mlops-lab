@@ -80,7 +80,7 @@ with col2:
 
             try:
                 # Get API endpoint from environment variable or use default
-                api_endpoint = os.getenv("API_URL", "http://localhost:8000")
+                api_endpoint = os.getenv("API_URL", "http://model:8000")
                 predict_url = f"{api_endpoint.rstrip('/')}/predict"
 
                 st.write(f"Connecting to API at: {predict_url}")
@@ -168,7 +168,7 @@ with col2:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Fetch version, hostname, and IP address
-version = os.getenv("APP_VERSION", "1.0.0")  # Default version if not set in environment
+version = os.getenv("APP_VERSION", "2.0.0")  # Default version if not set in environment
 hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
 
