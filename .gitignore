@@ -40,3 +40,5 @@ dist/
 # Ignore all .pkl files (models, preprocessors, etc.)
 *.pkl
 
+# Ignore processed data directory
+data/processed/
