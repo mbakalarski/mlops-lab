@@ -85,6 +85,22 @@ NAME    NAMESPACE       REVISION        UPDATED                                 
 prom    monitoring      1               2026-05-07 08:48:16.69556384 +0000 UTC  deployed        kube-prometheus-stack-84.5.0    v0.90.1 
 ```
 
+
+## Add Prometheus ServiceMonitor for FastAPI (model)
+
+```
+kubectl apply -f deployment/monitoring/servicemonitor.yaml
+```
+
+
+## Import Grafana dashboard template or create new one
+
+```
+FastAPI Observability
+ID: 22676
+```
+
+
 ## Cleanup
 
 ```
