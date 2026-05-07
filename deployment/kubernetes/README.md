@@ -47,10 +47,16 @@ kind-worker2         Ready    <none>          15m   v1.35.0
 ```
 
 
-## Model and Streamlit
+## App: Model and Streamlit
 
 ```
 kubectl apply -R -f deployment/kubernetes
+```
+
+## App: Upgrade (latest images)
+
+```
+kubectl rollout restart deployment streamlit model
 ```
 
 ## Prometheus Stack
