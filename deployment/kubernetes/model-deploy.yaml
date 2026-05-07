@@ -15,5 +15,5 @@ spec:
         app: model
     spec:
       containers:
-      - image: ghcr.io/mbakalarski/mlops-bootcamp-house-price-predictor:f69724e
+      - image: ghcr.io/mbakalarski/mlops-bootcamp-house-price-predictor:latest
         name: model

@@ -15,5 +15,5 @@ spec:
         app: streamlit
     spec:
       containers:
-      - image: ghcr.io/mbakalarski/mlops-bootcamp-house-price-predictor-streamlit:f69724edcca9f05116622bbb8f579bf5af815e97
+      - image: ghcr.io/mbakalarski/mlops-bootcamp-house-price-predictor-streamlit:latest
         name: streamlit
