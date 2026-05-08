@@ -37,7 +37,7 @@
     
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m])) by (le, handler))",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))",
           "refId": "A"
         }
       ],
@@ -69,6 +69,116 @@
         "w": 8,
         "x": 0,
         "y": 18
+      }
+    },
+    {
+      "type": "text",
+      "title": "",
+      "options": {
+        "content": "",
+        "mode": "markdown"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 18
+      }
+    },
+    {
+      "title": "Incoming Traffic (Bytes/sec)",
+      "type": "timeseries",
+    
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(http_request_size_bytes_sum[5m])) by (handler)"
+        }
+      ],
+    
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps"
+        }
+      },
+    
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 27
+      }
+    },
+    {
+      "title": "Average Request Size",
+      "type": "timeseries",
+    
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(http_request_size_bytes_sum[5m])) by (handler) / sum(rate(http_request_size_bytes_count[5m])) by (handler)"
+        }
+      ],
+    
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        }
+      },
+    
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 27
+      }
+    },
+    {
+      "title": "Outgoing Traffic (Bytes/sec)",
+      "type": "timeseries",
+    
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(http_response_size_bytes_sum[5m])) by (handler)"
+        }
+      ],
+    
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps"
+        }
+      },
+    
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 36
+      }
+    },
+    {
+      "title": "Average Response Size",
+      "type": "timeseries",
+    
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(http_response_size_bytes_sum[5m])) by (handler) / sum(rate(http_response_size_bytes_count[5m])) by (handler)"
+        }
+      ],
+    
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        }
+      },
+    
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 36
       }
     }
   ]
