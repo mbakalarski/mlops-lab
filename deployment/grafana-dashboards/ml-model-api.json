@@ -22,6 +22,8 @@
         }
       ],
 
+      "unit": "req/s",
+
       "gridPos": {
         "h": 9,
         "w": 8,
@@ -35,7 +37,7 @@
     
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m])) by (le, handler))",
           "refId": "A"
         }
       ],
@@ -47,6 +49,26 @@
         "w": 8,
         "x": 8,
         "y": 0
+      }
+    },
+    {
+      "title": "Error Rate (4xx/5xx Responses)",
+      "type": "timeseries",
+    
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(http_requests_total{status=~\"4..|5..\"}[1m])) by (handler)"
+        }
+      ],
+
+      "unit": "req/s",
+
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 18
       }
     }
   ]
