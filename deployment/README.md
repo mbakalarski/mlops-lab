@@ -47,18 +47,6 @@ kind-worker2         Ready    <none>          15m   v1.35.0
 ```
 
 
-## App: Model and Streamlit
-
-```
-kubectl apply -R -f deployment/kubernetes
-```
-
-## App: Upgrade (latest images)
-
-```
-kubectl rollout restart deployment streamlit model
-```
-
 ## Prometheus Stack
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -86,26 +74,37 @@ prom    monitoring      1               2026-05-07 08:48:16.69556384 +0000 UTC  
 ```
 
 
-## Add Prometheus ServiceMonitor for FastAPI (model)
+## Grafana dashboards
 
 ```
-kubectl apply -f deployment/monitoring/servicemonitor.yaml
+kubectl -n monitoring create configmap ml-model-api-dashboard \
+  --from-file deployment/grafana-dashboards/ml-model-api.json \
+  --dry-run=client -o yaml \
+  > deployment/k8s/grafana/dashboard-cm.yaml
+```
+
+and add label:
+
+```
+yq -i '.metadata.labels.grafana_dashboard = "1"' deployment/k8s/grafana/dashboard-cm.yaml
 ```
 
 
-## Import Grafana dashboard template or create new one
+## Deploy
 
 ```
-FastAPI Observability
-ID: 22676
+kubectl apply -R -f deployment/k8s
+```
+
+
+## Upgrade to latest images
+
+```
+kubectl rollout restart deployment streamlit model
 ```
 
 
 ## Cleanup
-
-```
-kubectl delete -R -f deployment/kubernetes
-```
 
 ```
 kind delete cluster

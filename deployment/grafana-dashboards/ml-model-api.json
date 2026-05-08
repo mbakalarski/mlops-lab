@@ -1,0 +1,53 @@
+{
+  "title": "ML Model API",
+  "schemaVersion": 42,
+  "version": 1,
+  "timezone": "browser",
+  "refresh": "10s",
+
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+
+  "panels": [
+    {
+      "title": "Request Rate (Total per Endpoint)",
+      "type": "timeseries",
+
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total[1m])) by (handler)",
+          "refId": "A"
+        }
+      ],
+
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "title": "Latency (95th Percentile)",
+      "type": "timeseries",
+    
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, handler))",
+          "refId": "A"
+        }
+      ],
+    
+      "unit": "s",
+    
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      }
+    }
+  ]
+}
