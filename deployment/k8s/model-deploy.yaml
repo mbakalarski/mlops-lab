@@ -5,7 +5,7 @@ metadata:
     app: model
   name: model
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: model
@@ -17,3 +17,12 @@ spec:
       containers:
       - image: ghcr.io/mbakalarski/mlops-bootcamp-house-price-predictor:latest
         name: model
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"

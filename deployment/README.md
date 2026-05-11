@@ -73,6 +73,10 @@ NAME    NAMESPACE       REVISION        UPDATED                                 
 prom    monitoring      1               2026-05-07 08:48:16.69556384 +0000 UTC  deployed        kube-prometheus-stack-84.5.0    v0.90.1 
 ```
 
+```
+kubectl get all -n monitoring
+```
+
 
 ## Grafana dashboards
 
@@ -80,13 +84,29 @@ prom    monitoring      1               2026-05-07 08:48:16.69556384 +0000 UTC  
 kubectl -n monitoring create configmap ml-model-api-dashboard \
   --from-file deployment/grafana-dashboards/ml-model-api.json \
   --dry-run=client -o yaml \
-  > deployment/k8s/grafana/dashboard-cm.yaml
+  > deployment/k8s/monitoring/dashboard-cm.yaml
 ```
 
 and add label:
 
 ```
-yq -i '.metadata.labels.grafana_dashboard = "1"' deployment/k8s/grafana/dashboard-cm.yaml
+yq -i '.metadata.labels.grafana_dashboard = "1"' deployment/k8s/monitoring/dashboard-cm.yaml
+```
+
+
+## Install KEDA
+
+```
+helm repo add kedacore https://kedacore.github.io/charts
+helm repo update
+
+helm install keda kedacore/keda \
+  --namespace keda \
+  --create-namespace
+```
+
+```
+kubectl get all -n keda
 ```
 
 
@@ -97,10 +117,41 @@ kubectl apply -R -f deployment/k8s
 ```
 
 
-## Upgrade to latest images
+#### Upgrade to latest images:
 
 ```
 kubectl rollout restart deployment streamlit model
+```
+
+
+## Run a Load Test with [rakyll/hey](https://github.com/rakyll/hey)
+
+https://github.com/rakyll/hey
+
+```bash
+cat <<EOF > predict.json
+{
+  "sqft": 4500,
+  "bedrooms": 4,
+  "bathrooms": 2,
+  "location": "Urban",
+  "year_built": 2014,
+  "condition": "Good"
+}
+EOF
+```
+
+```bash
+curl -sX POST http://localhost:30100/predict \
+  -H "Content-Type: application/json" \
+  -d @predict.json | jq .
+```
+
+```bash
+hey -n 5000 -c 200 -m POST \
+  -H "Content-Type: application/json" \
+  -D predict.json \
+  http://localhost:30100/predict
 ```
 
 
