@@ -154,6 +154,13 @@ hey -n 5000 -c 200 -m POST \
   http://localhost:30100/predict
 ```
 
+```bash
+hey -z 3m -c 200 -m POST \
+  -H "Content-Type: application/json" \
+  -D predict.json \
+  http://localhost:30100/predict
+```
+
 
 ## Cleanup
 
