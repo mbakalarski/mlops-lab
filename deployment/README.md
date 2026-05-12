@@ -162,6 +162,24 @@ hey -z 3m -c 200 -m POST \
 ```
 
 
+## CPU Based Auto Scaling with KEDA
+
+```
+helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+helm repo update
+
+helm upgrade --namespace kube-system --install metrics-server metrics-server/metrics-server --set args[0]="--kubelet-insecure-tls"
+```
+
+```
+kubectl top node
+```
+
+```
+kubectl top pod
+```
+
+
 ## Cleanup
 
 ```

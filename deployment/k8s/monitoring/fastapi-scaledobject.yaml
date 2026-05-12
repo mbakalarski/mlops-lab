@@ -23,3 +23,8 @@ spec:
       metricName: fastapi_request_rate
       query: sum(rate(http_requests_total[1m]))
       threshold: '10'
+  - type: cpu               # CPU based Auto Scaling with KEDA
+    metricType: Utilization
+    metadata:
+      value: "100"
+
