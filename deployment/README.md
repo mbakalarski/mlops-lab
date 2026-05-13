@@ -1,4 +1,4 @@
-# Kubernetes Deployment Code
+# Kubernetes Deployment
 
 ## Tools
 
