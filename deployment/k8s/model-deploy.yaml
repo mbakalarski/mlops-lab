@@ -15,7 +15,7 @@ spec:
         app: model
     spec:
       containers:
-        image: ghcr.io/mbakalarski/mlops-lab:latest
+      - image: ghcr.io/mbakalarski/mlops-lab:latest
         name: model
         ports:
         - containerPort: 8000

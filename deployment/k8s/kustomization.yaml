@@ -1,0 +1,6 @@
+resources:
+- monitoring
+- model-deploy.yaml
+- model-svc.yaml
+- streamlit-deploy.yaml
+- streamlit-svc.yaml

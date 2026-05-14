@@ -15,5 +15,5 @@ spec:
         app: streamlit
     spec:
       containers:
-        image: ghcr.io/mbakalarski/mlops-lab-streamlit:latest
+      - image: ghcr.io/mbakalarski/mlops-lab-streamlit:latest
         name: streamlit

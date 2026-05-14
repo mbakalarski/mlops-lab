@@ -1,0 +1,13 @@
+resources:
+- servicemonitor.yaml
+- fastapi-scaledobject.yaml
+
+configMapGenerator:
+- name: ml-model-api-dashboard
+  namespace: monitoring
+  files:
+  - dashboards/ml-model-api.json
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    grafana_dashboard: "1"

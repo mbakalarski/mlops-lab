@@ -78,23 +78,7 @@ kubectl get all -n monitoring
 ```
 
 
-## Grafana dashboards
-
-```
-kubectl -n monitoring create configmap ml-model-api-dashboard \
-  --from-file deployment/grafana-dashboards/ml-model-api.json \
-  --dry-run=client -o yaml \
-  > deployment/k8s/monitoring/dashboard-cm.yaml
-```
-
-and add label:
-
-```
-yq -i '.metadata.labels.grafana_dashboard = "1"' deployment/k8s/monitoring/dashboard-cm.yaml
-```
-
-
-## Install KEDA
+## Install KEDA for Latency Based AutoScaling
 
 ```
 helm repo add kedacore https://kedacore.github.io/charts
@@ -110,10 +94,28 @@ kubectl get all -n keda
 ```
 
 
-## Deploy
+## Install metrics-server for CPU Based AutoScaling
 
 ```
-kubectl apply -R -f deployment/k8s
+helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+helm repo update
+
+helm upgrade --namespace kube-system --install metrics-server metrics-server/metrics-server --set args[0]="--kubelet-insecure-tls"
+```
+
+```
+kubectl top node
+```
+
+```
+kubectl top pod
+```
+
+
+## Deploy App
+
+```
+kubectl apply -k deployment/k8s
 ```
 
 
@@ -159,24 +161,6 @@ hey -z 3m -c 200 -m POST \
   -H "Content-Type: application/json" \
   -D predict.json \
   http://localhost:30100/predict
-```
-
-
-## CPU Based Auto Scaling with KEDA
-
-```
-helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
-helm repo update
-
-helm upgrade --namespace kube-system --install metrics-server metrics-server/metrics-server --set args[0]="--kubelet-insecure-tls"
-```
-
-```
-kubectl top node
-```
-
-```
-kubectl top pod
 ```
 
 
