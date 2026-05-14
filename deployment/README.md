@@ -77,6 +77,11 @@ prom    monitoring      1               2026-05-07 08:48:16.69556384 +0000 UTC  
 kubectl get all -n monitoring
 ```
 
+### Grafana admin password:
+```
+kubectl -n monitoring get secrets prom-grafana -o yaml | yq .data.admin-password | base64 -d ; echo
+```
+
 
 ## Install KEDA for Latency Based AutoScaling
 
