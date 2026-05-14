@@ -1,7 +1,7 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: fastapi-latency-autoscaler
+  name: fastapi-autoscaler
   namespace: default
 spec:
   scaleTargetRef:
